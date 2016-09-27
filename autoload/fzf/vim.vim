@@ -614,6 +614,20 @@ function! fzf#vim#ag_raw(command_suffix, ...)
   return call('fzf#vim#grep', extend(['ag --nogroup --column --color '.a:command_suffix, 1], a:000))
 endfunction
 
+" rg command suffix, [options]
+function! fzf#vim#rg_raw(command_suffix, ...)
+  return call('fzf#vim#grep', extend(['rg --no-heading --column --color always '.a:command_suffix, 1], a:000))
+endfunction
+
+" query, [[ag options], options]
+function! fzf#vim#rg(query, ...)
+  let query = empty(a:query) ? '^(?=.)' : a:query
+  let args = copy(a:000)
+  let ag_opts = len(args) > 1 ? remove(args, 0) : ''
+  let command = ag_opts . ' ' . s:q1(query)
+  return call('fzf#vim#rg_raw', insert(args, command, 0))
+endfunction
+
 " command, with_column, [options]
 function! fzf#vim#grep(grep_command, with_column, ...)
   let words = []
